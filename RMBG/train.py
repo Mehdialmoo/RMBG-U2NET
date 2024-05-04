@@ -18,9 +18,24 @@ from tensorflow.keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 # Set the TensorFlow log level to suppress unnecessary output
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
-# Define global variables for image height and width
-global image_h
-global image_w
+# Define global variables
+IMG_H = 512
+IMG_W = 512
+
+INPUT_SHAPE = (IMG_H, IMG_W, 3)
+BATCH = 32
+IR = 0.001
+EPOCH = 5
+
+# Set paths
+PATH = r"D:\git ex\DA\RMBG-U2NET\Data"
+MODEL_PATH = os.path.join("files", "model.h5")
+CSV_PATH = os.path.join("files", "data.csv")
+
+
+def GPU_setup():
+    # tf.debugging.set_log_device_placement(True)
+    print(f"GPUs Available: {len(tf.config.list_physical_devices('GPU'))}")
 
 # Define a helper function to create a directory
 
@@ -64,7 +79,7 @@ def read_image(path):
     # Read the image and resize it
     path = path.decode()
     x = cv2.imread(path, cv2.IMREAD_COLOR)
-    x = cv2.resize(x, (image_w, image_h))
+    x = cv2.resize(x, (IMG_W, IMG_H))
     x = x/255.0
     x = x.astype(np.float32)
     return x
@@ -76,7 +91,7 @@ def read_mask(path):
     # Read the mask and resize it
     path = path.decode()
     x = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-    x = cv2.resize(x, (image_w, image_h))
+    x = cv2.resize(x, (IMG_W, IMG_H))
     x = x.astype(np.float32)  # (h, w)
     x = np.expand_dims(x, axis=-1)  # (h, w, 1)
     x = np.concatenate([x, x, x, x], axis=-1)  # (h, w, 4)
@@ -92,8 +107,8 @@ def tf_parse(x, y):
         return x, y
 
     x, y = tf.numpy_function(_parse, [x, y], [tf.float32, tf.float32])
-    x.set_shape([image_h, image_w, 3])
-    y.set_shape([image_h, image_w, 4])
+    x.set_shape([IMG_W, IMG_H, 3])
+    y.set_shape([IMG_W, IMG_H, 4])
     return x, y
 
 # Define a helper function to create a TensorFlow dataset
@@ -113,33 +128,20 @@ if __name__ == "__main__":
     # Set the random seed for reproducibility
     create_dir("files")
 
-    # Set hyperparameters
-    image_h = 512
-    image_w = 512
-    input_shape = (image_h, image_w, 3)
-    batch_size = 4
-    lr = 1e-4
-    num_epochs = 100
-
-    # Set paths
-    dataset_path = " "
-    model_path = os.path.join("files", "model.h5")
-    csv_path = os.path.join("files", "data.csv")
-
     # Load the dataset
-    (train_x, train_y), (valid_x, valid_y) =\
-        load_dataset(dataset_path, split=0.2)
+    (train_x, train_y), (valid_x, valid_y) = load_dataset(PATH, split=0.2)
     print(
-        f"Train: {len(train_x)}/{len(train_y)} - Valid:\
-            {len(valid_x)}/{len(valid_y)}\n")
+        f"Train: {len(train_x)}/{len(train_y)} - Valid:{len(valid_x)}/{len(valid_y)}\n")
+
+    GPU_setup()
 
     """
     now we need to create TensorFlow datasets for
     both the training and validation sets, which are
     used to feed data into the model during training.
     """
-    train_ds = tf_dataset(train_x, train_y, batch=batch_size)
-    valid_ds = tf_dataset(valid_x, valid_y, batch=batch_size)
+    train_ds = tf_dataset(train_x, train_y, batch=BATCH)
+    valid_ds = tf_dataset(valid_x, valid_y, batch=BATCH)
 
     """
     now we need to builds the deep learning model using
@@ -148,10 +150,10 @@ if __name__ == "__main__":
     loss function and an Adam optimizer with
     a specified learning rate.
     """
-    model = build_model(input_shape)
+    model = build_model(INPUT_SHAPE)
     model.compile(
         loss="binary_crossentropy",
-        optimizer=tf.keras.optimizers.Adam(lr)
+        optimizer=tf.keras.optimizers.Adam(IR)
     )
 
     """
@@ -161,14 +163,14 @@ if __name__ == "__main__":
     """
     callbacks = [
         ModelCheckpoint(
-            model_path, monitor='val_loss',
+            MODEL_PATH, monitor='val_loss',
             verbose=1, save_best_only=True),
 
         ReduceLROnPlateau(
             monitor='val_loss', factor=0.1,
             patience=5, min_lr=1e-7, verbose=1),
 
-        CSVLogger(csv_path, append=True),
+        CSVLogger(CSV_PATH, append=True),
         EarlyStopping(
             monitor='val_loss', patience=20,
             restore_best_weights=False)
@@ -183,6 +185,6 @@ if __name__ == "__main__":
     model.fit(
         train_ds,
         validation_data=valid_ds,
-        epochs=num_epochs,
+        epochs=EPOCH,
         callbacks=callbacks
     )
