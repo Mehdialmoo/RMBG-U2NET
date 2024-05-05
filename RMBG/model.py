@@ -26,12 +26,6 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.applications import ResNet50
 
 
-"""
-
-
-"""
-
-
 def residual_block(inputs, num_filters):
     """residual_block:
     residual_block is function, which creates
@@ -144,7 +138,9 @@ def build_model(input_shape):
                         weights="imagenet", input_tensor=inputs)
 
     # Encoder
+
     s1 = resnet50.get_layer("input_1").output
+    # s1 = resnet50.get_layer("input_layer").output #for special tensorflow lib
     s2 = resnet50.get_layer("conv1_relu").output
     s3 = resnet50.get_layer("conv2_block3_out").output
     s4 = resnet50.get_layer("conv3_block4_out").output
@@ -176,9 +172,3 @@ def build_model(input_shape):
 
     model = Model(inputs, outputs, name="U-Net")
     return model
-
-
-if __name__ == "__main__":
-    input_shape = (512, 512, 3)
-    model = build_model(input_shape)
-    model.summary()
