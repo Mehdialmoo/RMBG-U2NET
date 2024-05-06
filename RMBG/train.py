@@ -32,19 +32,14 @@ class train:
 
         # Set paths
         self.PATH = PATH  # r"D:\git ex\DA\RMBG-U2NET\Data"
-        self.MODEL_PATH = os.path.join("files", "model.keras")
-        self.CSV_PATH = os.path.join("files", "data.csv")
+        file = self.PATH + "\\file"
+
+        self.MODEL_PATH = os.path.join(file, "model.h5")
+        self.CSV_PATH = os.path.join(file, "data.csv")
 
     def GPU_setup():
         tf.debugging.set_log_device_placement(True)
         print(f"GPUs Available: {len(tf.config.list_physical_devices('GPU'))}")
-
-    # Define a helper function to create a directory
-
-    def create_dir(self):
-        if not os.path.exists(self.PATH):
-            os.makedirs(f"{self.PATH}/files")
-
     """
     Defining helper functions: The script following scripts and functions
     defines several helper functions to perform tasks like split dataset
@@ -62,12 +57,10 @@ class train:
         Define a helper function to load the dataset
         and split it into training and validation sets
         """
-        split_size = int(len(X) * self.SPLIT)
+        # split_size = int(len(X) * self.SPLIT)
 
-        train_x, valid_x = train_test_split(
-            X, test_size=split_size, random_state=42)
-        train_y, valid_y = train_test_split(
-            Y, test_size=split_size, random_state=42)
+        train_x, valid_x, train_y, valid_y = train_test_split(
+            X, Y, train_size=1-self.SPLIT, test_size=self.SPLIT, random_state=42)
 
         return (train_x, train_y), (valid_x, valid_y)
 
@@ -118,9 +111,10 @@ class train:
         # Set the random seed for reproducibility
         np.random.seed(42)
         tf.random.set_seed(42)
-
-        # Set the random seed for reproducibility
-        self.create_dir()
+        file = self.PATH + "\\file"
+        print(file)
+        if not os.path.exists(file):
+            os.makedirs(file)
 
         # Load the dataset
         (train_x, train_y), (valid_x, valid_y) = self.load_dataset()
