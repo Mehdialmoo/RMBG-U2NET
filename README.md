@@ -3,8 +3,6 @@
 ## 1. Introduction
 Image Background Removal using segmentation is a fundamental task in computer vision, where the goal is to classify each pixel in an image as belonging to one of several classes and seprate the wanted pixel and remove the unwanted ones. for this task we will be using U-2-Net based on The U-Net model, which is a popular architecture for image segmentation tasks. firtly lets look at 
 
-
-
 ``` bash
     RMBG-U2NET
     │
@@ -20,7 +18,6 @@ Image Background Removal using segmentation is a fundamental task in computer vi
     ├── RMBG_ENV.yml
     └── workspace.ipynb
 ```
-
 
 ## 2. U-Net Architecture
 U-Net Architecture is based on nested U-structure that consists of an encoder that downsamples the input image to extract high-level features, a bridge that applies dilated convolutions to increase the receptive field, and a decoder that upsamples the features to produce a segmentation mask.
@@ -64,22 +61,23 @@ People Segmentation dataset is a collection of images containing people, along w
 
 ### 3.4. Dataset combination & preproccessing
 The dataset used in this project is a combination of the P3M-10k and people segmentation datasets, which are two widely used datasets for the human segment of Datasets but the structure of these two datasets is different, the first step was to remove the segmentation folder from people segmentation dataset we only need the human mask after all to remove humans from the background, we left with the original images and masks, for the other people dataset "P3M-10k" firstly we use use the train, it doesn’t need any further preprocess to making the validation part ready we use "P3M-500-NP" folder and we only use "mask" and "original_image" folders, we don't need the other files from this dataset. and finally COD-10k-v3 dataset, from both the "train" and "test" folders, we use Image and "GT_object" folders that contain the mask of the original object, after copying the needed folder we mix all the original images in one folder named images and we use "mask" folders and "GT-object" files into a masks folder, by this we have a dataset contains 25K samples of (.jpg) images and (.PNG) masks, now by a combination of these three rich datasets, our model can be trained on animals, objects and humans.
+
 *** IMPORTANT NOTICE: In workshop.ipynb file the model is trained only on 500 sample datafrom the original dataset due to computational limitation ***
 
 ## 4. installing and Running the model
 
-### 4.1. **install and Load the Model**: 
+### 4.1. install and Load the Model: 
 to be able to run the model first step is to clone the repository from GitHub:
 You can download the repository to your local machine using git clone command. Open your terminal and type:
 
 ```bash
-git clone
+git clone git@github.com:Mehdialmoo/RMBG-U2NET.git
 ```
 
 in the second step, Once the repository is cloned, navigate to the repository using the cd command:
 
 ```bash
-cd backgroundremover
+cd RMBG-U2NET
 ```
 
 Install the required packages and the environment:
@@ -96,7 +94,7 @@ conda activate rmbg_ENV
 ```
 Now, you have successfully installed and activated the environment with the specified packages and dependencies.
 
-### 4.2. **Prepare the Dataset**:
+### 4.2. Prepare the Dataset:
 Due to Github limitation the dataset is uploaded on ....... by clicking here[] you will be able to download the dataset after cloning this repository, you are able to unzip the dataset copy and paste in the following order
 ```bash
     combined_dataset/
@@ -112,30 +110,25 @@ Due to Github limitation the dataset is uploaded on ....... by clicking here[] y
 ```
 "file" folder contains the data.CSV file saves the weights and values of our model and "model.h5" which is a checkpoint of the model which if you dont need to train the model you can use this checkpoint by loading it using third cell in "workspace.ipynb" file.
 
-### 4.3. **Run the Model**: 
+### 4.3. Run the Model: 
 
-### 4.4. **Background Removal**: 
+### 4.4. Background Removal: 
 
 
-References:
+## 5. References:
 
-U-Net: Convolutional Networks for Biomedical Image Segmentation. Olaf Ronneberger, Philipp Fischer, and Thomas Brox. 2015. https://arxiv.org/abs/1505.04597
-Deep Residual Learning for Image Recognition. Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. 2015. https://arxiv.org/abs/1512.03385
-TensorFlow Keras Documentation. https://www.tensorflow.org/api_docs/python/tf/keras
+1. U-Net: Convolutional Networks for Biomedical Image Segmentation. Olaf Ronneberger, Philipp Fischer, and Thomas Brox. 2015. https://arxiv.org/abs/1505.04597
+2. Deep Residual Learning for Image Recognition. Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. 2015. https://arxiv.org/abs/1512.03385
+3. TensorFlow Keras Documentation. https://www.tensorflow.org/api_docs/python/tf/keras
 ResNet50 Model. https://www.tensorflow.org/api_docs/python/tf/keras/applications/ResNet50
 
-Source: Conversation with Bing, 07/05/2024
-(1) U 2 -Net: U Square Net - GitHub. https://github.com/xuebinqin/U-2-Net.
-(2) Image Background Removal Using U-2-Net | by Leslie Kaye VM - Medium. https://medium.com/@vm.lesliekaye/image-background-removal-using-u-2-net-cf36f1c3efc7.
-(3) Image Background Removal with U^2-Net and OpenVINO™. https://docs.openvino.ai/2022.3/notebooks/205-vision-background-removal-with-output.html.
-(4) Step-by-Step Guide to Automatic Background Removal in Videos ... - Medium. https://medium.com/@CodingNerdsCOG/step-by-step-guide-to-automatic-background-removal-in-videos-with-u-2-model-deep-learning-aae7c297654a.
-(5) U2Net : A machine learning model that performs object cropping ... - Medium. https://medium.com/axinc-ai/u2net-a-machine-learning-model-that-performs-object-cropping-in-a-single-shot-48adfc158483.
-(6) undefined. https://github.com/xuebinqin/U-2-Net/issues/295.
-(7) undefined. https://drive.google.com/uc?id=1rbSTGKAE-MTxBYHd-51l2hMOQPT_7EPy.
-(8) undefined. https://drive.google.com/uc?id=1ao1ovG1Qtx4b7EoskHXmi2E9rp5CHLcZ.
-(9) undefined. https://drive.google.com/uc?id=1-Yg0cxgrNhHP-016FPdp902BR-kSsA4P.
+4. U-2-Net: U Square Net - GitHub. https://github.com/xuebinqin/U-2-Net.
+5. Image Background Removal Using U-2-Net | by Leslie Kaye VM - Medium. https://medium.com/@vm.lesliekaye/image-background-removal-using-u-2-net-cf36f1c3efc7.
+6. Image Background Removal with U^2-Net and OpenVINO™. https://docs.openvino.ai/2022.3/notebooks/205-vision-background-removal-with-output.html.
+7. Step-by-Step Guide to Automatic Background Removal in Videos ... - Medium. https://medium.com/@CodingNerdsCOG/step-by-step-guide-to-automatic-background-removal-in-videos-with-u-2-model-deep-learning-aae7c297654a.
+8. U2Net : A machine learning model that performs object cropping ... - Medium. https://medium.com/axinc-ai/u2net-a-machine-learning-model-that-performs-object-cropping-in-a-single-shot-48adfc158483.
+9. P3M-10K:"P3M-10K: A Large-Scale Portrait Matting Dataset for Learning Automatic Background Replacement." IEEE Transactions on Image Processing, vol. 30, pp. 3665-3678, 2021.
+10. COD-10K-v3: "COD-10K: A Large-Scale Object Detection Dataset for Contextual Object Detection." IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 43, no. 10, pp. 3535-3548, 2021.
+11. People Segmentation: "Deep Learning for People Segmentation." In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pp. 4706-4715, 2017.
 
 
-P3M-10K:"P3M-10K: A Large-Scale Portrait Matting Dataset for Learning Automatic Background Replacement." IEEE Transactions on Image Processing, vol. 30, pp. 3665-3678, 2021.
-COD-10K-v3: "COD-10K: A Large-Scale Object Detection Dataset for Contextual Object Detection." IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 43, no. 10, pp. 3535-3548, 2021.
-People Segmentation: "Deep Learning for People Segmentation." In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pp. 4706-4715, 2017.
