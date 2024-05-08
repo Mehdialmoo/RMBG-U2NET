@@ -110,7 +110,12 @@ Due to Github limitation the dataset is uploaded on ....... by clicking here[] y
 ```
 "file" folder contains the data.CSV file saves the weights and values of our model and "model.h5" which is a checkpoint of the model which if you dont need to train the model you can use this checkpoint by loading it using third cell in "workspace.ipynb" file.
 
-### 4.3. Run the Model: 
+### 4.3. Run the Model:
+After following all the steps stated above, there are two methods to follow up either to train the model from scratch or to load the pretrained model that both methods will be disscussed in order:
+    #### 4.3.1 train the model:
+    
+    #### 4.3.2 load the pretrained model:
+    
 
 ### 4.4. Background Removal: 
 
