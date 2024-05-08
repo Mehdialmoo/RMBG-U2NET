@@ -113,9 +113,35 @@ Due to Github limitation the dataset is uploaded on ....... by clicking here[] y
 ### 4.3. Run the Model:
 After following all the steps stated above, there are two methods to follow up either to train the model from scratch or to load the pretrained model that both methods will be disscussed in order:
     #### 4.3.1 train the model:
+    firstly open "workspace.ipynb" file , then run the first 3 cells in order, after running the traning process firstly the model tries to create a folder named "file" is it wasn't existing along side other files in "Data" folder than the model tries to seperate validation and traning data apart from the initial data that includes images and masks, to save the weights in an CSV file and the model checkpoint as "h5" datatype.
+    second stage is it shows how many files are selected for traning and validation, and after that the model represents a quick summary of the model than it starts the traning process.
+
+    because of the computational limitation we trained the model on 500 samples of the original data and for the traning process we used this specefic settings but if you have the computational power run the model on the original data we recomment you to use the best performence setting, the settings are as follows:
+    
+    sample traning setting:
+    ```python
+
+    ```
+    our sample traning is based on 
+
+
+    recommended traning setting:
+    ```python
+    
+    ```
+    for the ease of use you can simply copy and paste this setting.
+
+    *** IMPORTANT NOTICE: It's better to train the Recommended setting on the full Dataset which is avalible from this link []***
+
+    After traning the model and before heading to the last cell we recommend reading the next section (next section here)
+
+    
+    
     
     #### 4.3.2 load the pretrained model:
-    
+    firstly open "workspace.ipynb" file , then run the first 2 cells in order, then you can skip the 3rd cell and head to the last cell to use the model.
+
+    After loading the model based on checkpopint and before heading to the last cell we recoomend reading the next section to be able to test the model on you own orefrenced images and get results.
 
 ### 4.4. Background Removal: 
 

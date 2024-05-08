@@ -170,5 +170,5 @@ def build_model(input_shape):
 
     outputs = Concatenate()([y1, y2, y3, y4])
 
-    model = Model(inputs, outputs, name="U-Net")
+    model = Model(inputs, outputs, name="U-2-Net")
     return model
