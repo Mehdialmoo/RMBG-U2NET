@@ -1,8 +1,7 @@
 # RMBG-U2NET
-![](./Data/test/masks/mask2.png)
+![](./Data/test/masks/mask1.png)
 
-## RMBG-U2NET Table of content 
-Abstract
+## RMBG-U2NET Table of content
 
 + [1. Introduction](#1-introduction)
 + [2. U-2-Net Architecture](#2-u-net-architecture)
@@ -14,7 +13,12 @@ Abstract
     - [3.1. P3M-10K](#31-p3m-10k)
     - [3.2. COD-10K-v3](#32-cod-10k-v3)
     - [3.3. People Segmentation](#33-people-segmentation)
-    - [3.4. Dataset Combination & Preprocessing](#34-dataset-combination--preproccessing)
+    - [3.4. Dataset Combination](#34-dataset-combination--preproccessing)
+    - [3.5. Data Preprocessing](#35-data-preprocessing)
+        * [3.5.1. Rename Function](#351-rename-function)
+        * [3.5.2. Resize Function](#352-resize-function)
+        * [3.5.3. Create csv Function](#353-create_csv-function)
+        * [3.5.4. Plot data Function](#354-plot_data-function)
 + [4. Installing and Running the Model](#4-installing-and-running-the-model)
     - [4.1. Install and Load the Model](#41-install-and-load-the-model)
     - [4.2. Prepare the Dataset](#42-prepare-the-dataset)
@@ -22,12 +26,12 @@ Abstract
     - [4.3.1. Train the Model](#431-train-the-model)
     - [4.3.2. Load the Pretrained Model](#432-load-the-pretrained-model)
     - [4.4. Background Removal](#44-background-removal)
-    + [5. Sytem information](#5-system-info)
++ [5. Sytem information](#5-system-info)
 + [6. References](#5-references)
 
 
 ## Abstract
-Summary: This project  is called RMBG-U2NET, which is a deep learning-based image background removal system using the U-2-Net architecture. The project provides a detailed explanation of the U-Net architecture, the datasets used (P3M-10K, COD-10K-v3, and People Segmentation), and the steps to install and run the model. The model can be trained from scratch or loaded as a pre-trained model, and it can be used for background removal in images for human, animal and objects.
+This project  is called RMBG-U2NET, which is a deep learning-based image background removal system using the U-2-Net architecture. The project provides a detailed explanation of the U-Net architecture, the datasets used (P3M-10K, COD-10K-v3, and People Segmentation), and the steps to install and run the model. The model can be trained from scratch or loaded as a pre-trained model, and it can be used for background removal in images for human, animal and objects.
 
 Keywords:
 
@@ -41,7 +45,19 @@ Image Background Removal using segmentation is a fundamental task in computer vi
 ```
     RMBG-U2NET
     │
-    ├── Data  
+    ├── Data/
+    │   ├── Images   
+    │   ├── Mask
+    │   ├── Dataset.CSV
+    │   ├── DATA.md
+    │   ├── file/ 
+    │   ├── test/
+    │   │   ├── util.py 
+    │   │   └── Preprocess.ipynb
+    │   │
+    │   └── Preprocess/
+    │       ├── util.py 
+    │       └── Preprocess.ipynb
     │
     ├── RMBG/
     │   ├── __init__.py 
@@ -59,7 +75,7 @@ U-Net Architecture is based on nested U-structure that consists of an encoder th
 this Architecture which allows it to capture high-level semantic information and low-level details simultaneously. combination of low-level features from the encoder with high-level features from the decoder, helps to improve the accuracy of the segmentation.
 This makes it particularly effective for tasks like image background removal, where both the object of interest (foreground) and the rest of the image (background) need to be accurately identified.
 
-### 2.4. implementation U-Net Architecture 
+### 2.4. Implementation U-Net Architecture 
 In the next sections, we will discuss the implementation of Image Background Removal using U-2-Net,to implement U-2-Net model we use a pre-trained ResNet50 model. The ResNet50 model is a deep convolutional neural network that has been pre-trained on the ImageNet dataset, which consists of over 1 million images and 1000 classes. By using a pre-trained model, we can leverage the knowledge that the model has already learned from the ImageNet dataset and apply it to our image segmentation task.
 
 We use ResNet50 for first five convolutional blocks that create the The encoder part,and  with skip connections to the decoder. The bridge consists of a dilated convolution with 1024 filters. The decoder consists of four decoder blocks, each of which upsamples the input and concatenates it with skip features from the encoder, followed by a residual block. Four output layers are defined, each of which applies a 1x1 convolution with sigmoid activation to produce a binary segmentation mask. The output masks are concatenated along the channel dimension.
@@ -84,7 +100,6 @@ It's important to note that while U-2-Net is powerful, the quality of the result
 ## 3. DATA
 To train this model we used a dataset that contains a combined dataset of P3M-10K, COD-10K-v3, and People Segmentation datasets. These datasets are widely used in the field of computer vision, particularly in the areas of reflection, shadow, and animal and people segmentation. first lets disscussed each and every dataset used individually:
 
-
 ### 3.1. P3M-10K
 P3M-10K is a large-scale portrait matting dataset that contains 10,000 high-resolution portrait images, along with their corresponding alpha mattes and foregrounds. The dataset is divided into training, validation, and testing sets, each containing 7,000, 1,000, and 2,000 images, respectively. in this dataset the faces are blured due to privacy concernes.
 
@@ -94,8 +109,29 @@ COD-10K-v3 is a large-scale dataset for object detection and segmentation, which
 ### 3.3. People Segmentation
 People Segmentation dataset is a collection of images containing people, along with their corresponding segmentation masks. compared to P3M-10k dataset this dataset contains different angles and different variation of pictuires including people inside it.
 
-### 3.4. Dataset combination & preproccessing
+### 3.4. Dataset Combination
 The dataset used in this project is a combination of the P3M-10k and people segmentation datasets, which are two widely used datasets for the human segment of Datasets but the structure of these two datasets is different, the first step was to remove the segmentation folder from people segmentation dataset we only need the human mask after all to remove humans from the background, we left with the original images and masks, for the other people dataset "P3M-10k" firstly we use use the train, it doesn’t need any further preprocess to making the validation part ready we use "P3M-500-NP" folder and we only use "mask" and "original_image" folders, we don't need the other files from this dataset. and finally COD-10k-v3 dataset, from both the "train" and "test" folders, we use Image and "GT_object" folders that contain the mask of the original object, after copying the needed folder we mix all the original images in one folder named images and we use "mask" folders and "GT-object" files into a masks folder, by this we have a dataset contains 25K samples of (.jpg) images and (.PNG) masks, now by a combination of these three rich datasets, our model can be trained on animals, objects and humans.
+
+### 3.5. Data Preprocessing
+To  be able  to work with the images and their mask we need some preproccessing steps, in Data folder there is a Preprocess folder which contain "util.py" and "Preprocess.ipynb" file which are to normalize and regulize the data that we have, that performs several operations on image files in a directory. Here's a breakdown of what each function does:
+
+
+#### 3.5.1. Rename function: 
+
+This function renames all image files in the specified directory by adding a category prefix to the filename. It checks if the file is an image (either JPG or PNG format) and renames it by appending the category name followed by an underscore and a count number.
+
+#### 3.5.2. Resize function:
+
+This function resizes all image files in the specified directory to the specified size. It checks if the file is an image (either JPG, JPEG, or PNG format) and resizes it using the PIL library. the pictures could be left as they are because we use transformers in the model to resize all the input images also but this function us provided in case the model didn't work on the minimum required settings, you can remove the transformer part from the actual code and resize all the data seprerately.
+
+#### 3.5.3. create_csv function:
+
+This function creates a CSV file containing the image name, path of image, mask path, and category of the image. It traverses through the image path and mask path, gets the image name and category, and writes the image details to the CSV file.
+
+#### 3.5.4. plot_Data function: 
+
+This function plots the number of files for each category in the specified directory. It traverses through the directory, gets the category from the filename, increments the count for the category, and plots the number of files for each category using matplotlib.
+
 
 *** IMPORTANT NOTICE: In workshop.ipynb file the model is trained only on 500 sample datafrom the original dataset due to computational limitation ***
 
@@ -134,10 +170,18 @@ Due to Github limitation the dataset is uploaded on ....... by clicking here[] y
     combined_dataset/
     │
     ├── Data/
-    │   ├── Images/   
-    │   ├── Mask/
+    │   ├── Images   
+    │   ├── Mask
+    │   ├── Dataset.CSV
+    │   ├── DATA.md
     │   ├── file/ 
-    │   └── test/
+    │   ├── test/
+    │   │   ├── util.py 
+    │   │   └── Preprocess.ipynb
+    │   │
+    │   └── Preprocess/
+    │       ├── util.py 
+    │       └── Preprocess.ipynb
     .
     .
     .
@@ -205,10 +249,10 @@ firstly open "workspace.ipynb" file , then run the first 2 cells in order, then 
 ### 4.4. Background Removal: 
 Till this step there is one step more step to be able to use the trained or pretrained model, which is to use pictures that you want to try the model on, to be able to do this you need to find "test" folder, in "Data" folder. this folders structure is like our initial dataset  that is 2 folder of images and masks, you only need to copy the pictures that you want into "images" folder in "test" folder and leave the rest to the model to work on the pictures. here is some of the results of the outputs from the model.
 
-![]()
-![]()
-![]()
-![]()
+![](./Data/test/masks/mask1.png)
+![](./Data/test/masks/mask2.png)
+![](./Data/test/masks/mask3.png)
+![](./Data/test/masks/mask4.png)
 
 <b>IMPORTANT NOTICE: These results are from traning the model on Recommended settings on traning on the complete dataset </b>
 
@@ -241,7 +285,7 @@ OS:
 ```
 <b>The system that was used for sample training took 1h 50m to train with 500 images with the accuracy of  loss of  and val loss of </b> 
 
-<b>The system that was used for full training took 18h,35m to train with 25K images with the accuracy of  loss of  and val loss of </b>
+<b>The system that was used for full training took 18h,35m to train with 25K images with the accuracy of   loss of  and val loss of </b>
 
 ## 6. References:
 
