@@ -251,8 +251,8 @@ Till this step there is one step more step to be able to use the trained or pret
 
 ![](./Data/test/masks/mask1.png)
 ![](./Data/test/masks/mask2.png)
-![](./Data/test/masks/mask3.png)
-![](./Data/test/masks/mask4.png)
+![](./Data/test/masks/mask3.PNG)
+![](./Data/test/masks/mask4.PNG)
 
 <b>IMPORTANT NOTICE: These results are from traning the model on Recommended settings on traning on the complete dataset </b>
 
