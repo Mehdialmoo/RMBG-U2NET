@@ -51,13 +51,13 @@ Image Background Removal using segmentation is a fundamental task in computer vi
     │   ├── Dataset.CSV
     │   ├── DATA.md
     │   ├── file/ 
-    │   ├── test/
-    │   │   ├── util.py 
-    │   │   └── Preprocess.ipynb
-    │   │
-    │   └── Preprocess/
+    │   └── test/
     │       ├── util.py 
     │       └── Preprocess.ipynb
+    │   
+    ├── Preprocess/
+    │   ├── util.py 
+    │   └── Preprocess.ipynb
     │
     ├── RMBG/
     │   ├── __init__.py 
@@ -113,7 +113,7 @@ People Segmentation dataset is a collection of images containing people, along w
 The dataset used in this project is a combination of the P3M-10k and people segmentation datasets, which are two widely used datasets for the human segment of Datasets but the structure of these two datasets is different, the first step was to remove the segmentation folder from people segmentation dataset we only need the human mask after all to remove humans from the background, we left with the original images and masks, for the other people dataset "P3M-10k" firstly we use use the train, it doesn’t need any further preprocess to making the validation part ready we use "P3M-500-NP" folder and we only use "mask" and "original_image" folders, we don't need the other files from this dataset. and finally COD-10k-v3 dataset, from both the "train" and "test" folders, we use Image and "GT_object" folders that contain the mask of the original object, after copying the needed folder we mix all the original images in one folder named images and we use "mask" folders and "GT-object" files into a masks folder, by this we have a dataset contains 25K samples of (.jpg) images and (.PNG) masks, now by a combination of these three rich datasets, our model can be trained on animals, objects and humans.
 
 ### 3.5. Data Preprocessing
-To  be able  to work with the images and their mask we need some preproccessing steps, in Data folder there is a Preprocess folder which contain "util.py" and "Preprocess.ipynb" file which are to normalize and regulize the data that we have, that performs several operations on image files in a directory. Here's a breakdown of what each function does:
+To  be able  to work with the images and their mask we need some preproccessing steps, there is a Preprocess folder which contain "util.py" and "Preprocess.ipynb" file which are to normalize and regulize the data that we have, that performs several operations on image files in a directory. Here's a breakdown of what each function does:
 
 
 #### 3.5.1. Rename function: 
@@ -175,14 +175,9 @@ Due to Github limitation the dataset is uploaded on ....... by clicking here[] y
     │   ├── Dataset.CSV
     │   ├── DATA.md
     │   ├── file/ 
-    │   ├── test/
-    │   │   ├── util.py 
-    │   │   └── Preprocess.ipynb
-    │   │
-    │   └── Preprocess/
-    │       ├── util.py 
-    │       └── Preprocess.ipynb
-    .
+    │   └── test/
+    │       ├── images 
+    │       └── masks
     .
     .
 ```
@@ -251,8 +246,8 @@ Till this step there is one step more step to be able to use the trained or pret
 
 ![](./Data/test/masks/mask1.png)
 ![](./Data/test/masks/mask2.png)
-![](./Data/test/masks/mask3.PNG)
-![](./Data/test/masks/mask4.PNG)
+![](./Data/test/masks/mask3.png)
+![](./Data/test/masks/mask4.png)
 
 <b>IMPORTANT NOTICE: These results are from traning the model on Recommended settings on traning on the complete dataset </b>
 
@@ -283,9 +278,9 @@ Memory:
 OS:
     RedHat Enterprise (64bit)
 ```
-<b>The system that was used for sample training took 1h 50m to train with 500 images with the accuracy of  loss of  and val loss of </b> 
+<b>The system that was used for sample training took 1h 50m to train with 500 images with the accuracy of 73% loss of 0.3761  and val loss of 1.5220</b> 
 
-<b>The system that was used for full training took 18h,35m to train with 25K images with the accuracy of   loss of  and val loss of </b>
+<b>The system that was used for full training took 18h,35m to train with 25K images with the accuracy of 93%  loss of 0.0125  and val loss of 0.0839</b>
 
 ## 6. References:
 
