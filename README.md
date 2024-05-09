@@ -1,9 +1,44 @@
 # RMBG-U2NET
+![](./Data/test/masks/mask2.png)
+
+## RMBG-U2NET Table of content 
+Abstract
+
++ [1. Introduction](#1-introduction)
++ [2. U-2-Net Architecture](#2-u-net-architecture)
+    - [2.1. Residual Blocks](#21-residual-blocks)
+    - [2.2. Dilated Convolutions](#22-dilated-convolutions)
+    - [2.3. Decoder Block](#23-decoder-block)
+    - [2.4. Implementation of U-Net Architecture](#24-implementation-u-net-architecture)
++ [3. Data](#3-data)
+    - [3.1. P3M-10K](#31-p3m-10k)
+    - [3.2. COD-10K-v3](#32-cod-10k-v3)
+    - [3.3. People Segmentation](#33-people-segmentation)
+    - [3.4. Dataset Combination & Preprocessing](#34-dataset-combination--preproccessing)
++ [4. Installing and Running the Model](#4-installing-and-running-the-model)
+    - [4.1. Install and Load the Model](#41-install-and-load-the-model)
+    - [4.2. Prepare the Dataset](#42-prepare-the-dataset)
+    - [4.3. Run the Model](#43-run-the-model)
+    - [4.3.1. Train the Model](#431-train-the-model)
+    - [4.3.2. Load the Pretrained Model](#432-load-the-pretrained-model)
+    - [4.4. Background Removal](#44-background-removal)
+    + [5. Sytem information](#5-system-info)
++ [6. References](#5-references)
+
+
+## Abstract
+Summary: This project  is called RMBG-U2NET, which is a deep learning-based image background removal system using the U-2-Net architecture. The project provides a detailed explanation of the U-Net architecture, the datasets used (P3M-10K, COD-10K-v3, and People Segmentation), and the steps to install and run the model. The model can be trained from scratch or loaded as a pre-trained model, and it can be used for background removal in images for human, animal and objects.
+
+Keywords:
+
+Image Background Removal, U-2-Net, DeepLearning, ComputerVision
+P3M-10K, COD-10K-v3, People-Segmentation
+
 
 ## 1. Introduction
-Image Background Removal using segmentation is a fundamental task in computer vision, where the goal is to classify each pixel in an image as belonging to one of several classes and seprate the wanted pixel and remove the unwanted ones. for this task we will be using U-2-Net based on The U-Net model, which is a popular architecture for image segmentation tasks. firtly lets look at 
+Image Background Removal using segmentation is a fundamental task in computer vision, where the goal is to classify each pixel in an image as belonging to one of several classes and seprate the wanted pixel and remove the unwanted ones. for this task we will be using U-2-Net based on The U-Net model, which is a popular architecture for image segmentation tasks. firtly lets look at the folder structure of this repository:
 
-``` bash
+```
     RMBG-U2NET
     │
     ├── Data  
@@ -79,7 +114,6 @@ in the second step, Once the repository is cloned, navigate to the repository us
 ```bash
 cd RMBG-U2NET
 ```
-
 Install the required packages and the environment:
 The repository includes a environment file that lists all the required packages. To install and activate the environment specified in the given YAML file, you can follow these steps:
 
@@ -96,7 +130,7 @@ Now, you have successfully installed and activated the environment with the spec
 
 ### 4.2. Prepare the Dataset:
 Due to Github limitation the dataset is uploaded on ....... by clicking here[] you will be able to download the dataset after cloning this repository, you are able to unzip the dataset copy and paste in the following order
-```bash
+```
     combined_dataset/
     │
     ├── Data/
@@ -112,41 +146,104 @@ Due to Github limitation the dataset is uploaded on ....... by clicking here[] y
 
 ### 4.3. Run the Model:
 After following all the steps stated above, there are two methods to follow up either to train the model from scratch or to load the pretrained model that both methods will be disscussed in order:
-    #### 4.3.1 train the model:
-    firstly open "workspace.ipynb" file , then run the first 3 cells in order, after running the traning process firstly the model tries to create a folder named "file" is it wasn't existing along side other files in "Data" folder than the model tries to seperate validation and traning data apart from the initial data that includes images and masks, to save the weights in an CSV file and the model checkpoint as "h5" datatype.
-    second stage is it shows how many files are selected for traning and validation, and after that the model represents a quick summary of the model than it starts the traning process.
 
-    because of the computational limitation we trained the model on 500 samples of the original data and for the traning process we used this specefic settings but if you have the computational power run the model on the original data we recomment you to use the best performence setting, the settings are as follows:
-    
-    sample traning setting:
-    ```python
+#### 4.3.1. train the model:
+firstly open "workspace.ipynb" file , then run the first 3 cells in order, after running the traning process firstly the model tries to create a folder named "file" is it wasn't existing along side other files in "Data" folder than the model tries to seperate validation and traning data apart from the initial data that includes images and masks, to save the weights in an CSV file and the model checkpoint as "h5" datatype.
+second stage is it shows how many files are selected for traning and validation, and after that the model represents a quick summary of the model than it starts the traning process.
 
+The model is trained for a specified number of epochs (Sample: 10, full:100). During each epoch, the model processes the entire training dataset in batches(Sample: 2, full:100). After each epoch, the model's performance is evaluated on the validation dataset, and the model with the best performance is saved. The model with the best performance on the validation dataset is saved after each epoch. In this case, the model is saved in HDF5 (h5) format.
+
+The model's performance is monitored during training by tracking the loss and validation loss. The loss is the measure of error for the training dataset, while the validation loss is the measure of error for the validation dataset. The model's performance is considered to have improved if the validation loss decreases.
+
+The training process can be stopped early if the model's performance on the validation dataset does not improve after a specified number of epochs. As an example, the training process in sample training is stopped after 10 epochs, but in full training setting it has stopped on 57 epochs.
+
+The output of training shows the progress of the training process, including the epoch number, the batch number, the loss, the validation loss, and the learning rate. The training process is repeated for a specified number of epochs, and the model with the best performance on the validation dataset is saved as model.h5 file.
+
+because of the computational limitation you might expirence different results therefore we suggest 2 ways for traning this model but you can change the settings based on your prefrences. sample train of the model is to train on 500 samples of the original data and for the traning process specefic settings is used but if you have the computational power to run the model on the original data we recommend you to use the best performence setting named as full training setting.
+
+The settings are as follows:
+
+- sample traning setting:
+    ``` python
+    # initilizing training process
+    T = train(
+        IMG_H = 16,
+        IMG_W = 16,
+        BATCH = 2,
+        LR = 0.01,
+        EPOCH = 10,
+        SPLIT= 0.4,
+        PATH = Data_path)
+    # training the model 
+    T.train_model()
     ```
-    our sample traning is based on 
 
-
-    recommended traning setting:
+- full traning setting:
     ```python
-    
+    # initilizing training process
+    T = train(
+        IMG_H = 512,
+        IMG_W = 512,
+        BATCH = 64,
+        LR = 1e-6,
+        EPOCH = 100,
+        SPLIT= 0.2,
+        PATH = Data_path)
+    # training the model 
+    T.train_model()
     ```
-    for the ease of use you can simply copy and paste this setting.
 
-    *** IMPORTANT NOTICE: It's better to train the Recommended setting on the full Dataset which is avalible from this link []***
+    <i> * For the ease of use you can simply copy and paste this setting. *</i>
 
-    After traning the model and before heading to the last cell we recommend reading the next section (next section here)
+<b> IMPORTANT NOTICE: It's better to train the Recommended setting on the full Dataset which is avalible from this [link]() </b>
 
-    
-    
-    
-    #### 4.3.2 load the pretrained model:
-    firstly open "workspace.ipynb" file , then run the first 2 cells in order, then you can skip the 3rd cell and head to the last cell to use the model.
+After traning the model and before heading to the last cell we recommend reading the next section [next section here](#432-load-the-pretrained-model)
 
-    After loading the model based on checkpopint and before heading to the last cell we recoomend reading the next section to be able to test the model on you own orefrenced images and get results.
+#### 4.3.2 load the pretrained model:
+firstly open "workspace.ipynb" file , then run the first 2 cells in order, then you can skip the 3rd cell and head to the last cell to use the model. After loading the model based on checkpopint and before heading to the last cell we recommend reading the next section to be able to test the model on you own orefrenced images and get results.
 
 ### 4.4. Background Removal: 
+Till this step there is one step more step to be able to use the trained or pretrained model, which is to use pictures that you want to try the model on, to be able to do this you need to find "test" folder, in "Data" folder. this folders structure is like our initial dataset  that is 2 folder of images and masks, you only need to copy the pictures that you want into "images" folder in "test" folder and leave the rest to the model to work on the pictures. here is some of the results of the outputs from the model.
 
+![]()
+![]()
+![]()
+![]()
 
-## 5. References:
+<b>IMPORTANT NOTICE: These results are from traning the model on Recommended settings on traning on the complete dataset </b>
+
+the out put contains the refrence image provided concatenated with the results of model output.
+
+## 5. System info:
+the model have been trained and tested on two sytems with the following specs:
+System 1(sample training):
+```
+Processor:
+    13th Gen Intel® Core™ i9-13700HX Processor
+Graphics:
+    NVIDIA GeForce RTX 4080 8GB GDDR6
+Memory:
+    16GB DDR5 4800mhz
+OS:
+    Windows 11 (64bit)
+```
+
+System 2 (full traning):
+```
+Processor:
+    13th Gen Intel® Core™ i9-13700X Processor
+Graphics:
+    NVIDIA GeForce RTX 4080 16GB GDDR6
+Memory:
+    64GB DDR5 7800mhz (2 x 32GB)
+OS:
+    RedHat Enterprise (64bit)
+```
+<b>The system that was used for sample training took 1h 50m to train with 500 images with the accuracy of  loss of  and val loss of </b> 
+
+<b>The system that was used for full training took 18h,35m to train with 25K images with the accuracy of  loss of  and val loss of </b>
+
+## 6. References:
 
 1. U-Net: Convolutional Networks for Biomedical Image Segmentation. Olaf Ronneberger, Philipp Fischer, and Thomas Brox. 2015. https://arxiv.org/abs/1505.04597
 2. Deep Residual Learning for Image Recognition. Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. 2015. https://arxiv.org/abs/1512.03385
@@ -161,5 +258,3 @@ ResNet50 Model. https://www.tensorflow.org/api_docs/python/tf/keras/applications
 9. P3M-10K:"P3M-10K: A Large-Scale Portrait Matting Dataset for Learning Automatic Background Replacement." IEEE Transactions on Image Processing, vol. 30, pp. 3665-3678, 2021.
 10. COD-10K-v3: "COD-10K: A Large-Scale Object Detection Dataset for Contextual Object Detection." IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 43, no. 10, pp. 3535-3548, 2021.
 11. People Segmentation: "Deep Learning for People Segmentation." In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pp. 4706-4715, 2017.
-
-
