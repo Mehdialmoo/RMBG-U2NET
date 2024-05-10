@@ -101,13 +101,13 @@ It's important to note that while U-2-Net is powerful, the quality of the result
 To train this model we used a dataset that contains a combined dataset of P3M-10K, COD-10K-v3, and People Segmentation datasets. These datasets are widely used in the field of computer vision, particularly in the areas of reflection, shadow, and animal and people segmentation. first lets disscussed each and every dataset used individually:
 
 ### 3.1. P3M-10K
-P3M-10K is a large-scale portrait matting dataset that contains 10,000 high-resolution portrait images, along with their corresponding alpha mattes and foregrounds. The dataset is divided into training, validation, and testing sets, each containing 7,000, 1,000, and 2,000 images, respectively. in this dataset the faces are blured due to privacy concernes.
+P3M-10K is a large-scale portrait matting dataset that contains 10,000 high-resolution portrait images, along with their corresponding alpha mattes and foregrounds. The dataset is divided into training, validation, and testing sets, each containing 7,000, 1,000, and 2,000 images, respectively. in this dataset the faces are blured due to privacy concernes. [Download](https://www.kaggle.com/datasets/rahulbhalley/p3m-10k)
 
 ### 3.2. COD-10K-v3
-COD-10K-v3 is a large-scale dataset for object detection and segmentation, which contains 10,000 images with 80 object categories. The dataset is divided into training, validation, and testing sets, each containing 7,000, 1,000, and 2,000 images, respectively.
+COD-10K-v3 is a large-scale dataset for object detection and segmentation, which contains 10,000 images with 80 object categories. The dataset is divided into training, validation, and testing sets, each containing 7,000, 1,000, and 2,000 images, respectively. [Download](https://drive.google.com/file/d/1vRYAie0JcNStcSwagmCq55eirGyMYGm5/view?pli=1)
 
 ### 3.3. People Segmentation
-People Segmentation dataset is a collection of images containing people, along with their corresponding segmentation masks. compared to P3M-10k dataset this dataset contains different angles and different variation of pictuires including people inside it.
+People Segmentation dataset is a collection of images containing people, along with their corresponding segmentation masks. compared to P3M-10k dataset this dataset contains different angles and different variation of pictuires including people inside it. [Download](https://www.kaggle.com/datasets/nikhilroxtomar/person-segmentation?rvi=1)
 
 ### 3.4. Dataset Combination
 The dataset used in this project is a combination of the P3M-10k and people segmentation datasets, which are two widely used datasets for the human segment of Datasets but the structure of these two datasets is different, the first step was to remove the segmentation folder from people segmentation dataset we only need the human mask after all to remove humans from the background, we left with the original images and masks, for the other people dataset "P3M-10k" firstly we use use the train, it doesn’t need any further preprocess to making the validation part ready we use "P3M-500-NP" folder and we only use "mask" and "original_image" folders, we don't need the other files from this dataset. and finally COD-10k-v3 dataset, from both the "train" and "test" folders, we use Image and "GT_object" folders that contain the mask of the original object, after copying the needed folder we mix all the original images in one folder named images and we use "mask" folders and "GT-object" files into a masks folder, by this we have a dataset contains 25K samples of (.jpg) images and (.PNG) masks, now by a combination of these three rich datasets, our model can be trained on animals, objects and humans.
@@ -133,7 +133,7 @@ This function creates a CSV file containing the image name, path of image, mask 
 This function plots the number of files for each category in the specified directory. It traverses through the directory, gets the category from the filename, increments the count for the category, and plots the number of files for each category using matplotlib.
 
 
-*** IMPORTANT NOTICE: In workshop.ipynb file the model is trained only on 500 sample datafrom the original dataset due to computational limitation ***
+*** IMPORTANT NOTICE: In workshop.ipynb file the model is trained only on 1000 sample datafrom the original dataset due to computational limitation ***
 
 ## 4. installing and Running the model
 
@@ -165,9 +165,9 @@ conda activate rmbg_ENV
 Now, you have successfully installed and activated the environment with the specified packages and dependencies.
 
 ### 4.2. Prepare the Dataset:
-Due to Github limitation the dataset is uploaded on ....... by clicking here[] you will be able to download the dataset after cloning this repository, you are able to unzip the dataset copy and paste in the following order
+Due to Github limitation the dataset is uploaded on Kaggle by clicking here[Sample: 1000 images](https://www.kaggle.com/datasets/mehdialmousavie/sample-u-2-net-rmbg) [full : 25k images](https://www.kaggle.com/datasets/mehdialmousavie/full-u2net-rmbg) you will be able to download the dataset. After cloning this repository, you are able to unzip the dataset copy and paste in the following order
 ```
-    combined_dataset/
+    RMBG-U2NET/
     │
     ├── Data/
     │   ├── Images   
@@ -198,7 +198,7 @@ The training process can be stopped early if the model's performance on the vali
 
 The output of training shows the progress of the training process, including the epoch number, the batch number, the loss, the validation loss, and the learning rate. The training process is repeated for a specified number of epochs, and the model with the best performance on the validation dataset is saved as model.h5 file.
 
-because of the computational limitation you might expirence different results therefore we suggest 2 ways for traning this model but you can change the settings based on your prefrences. sample train of the model is to train on 500 samples of the original data and for the traning process specefic settings is used but if you have the computational power to run the model on the original data we recommend you to use the best performence setting named as full training setting.
+because of the computational limitation you might expirence different results therefore we suggest 2 ways for traning this model but you can change the settings based on your prefrences. sample train of the model is to train on 1000 samples of the original data and for the traning process specefic settings is used but if you have the computational power to run the model on the original data we recommend you to use the best performence setting named as full training setting.
 
 The settings are as follows:
 
@@ -234,7 +234,7 @@ The settings are as follows:
 
     <i> * For the ease of use you can simply copy and paste this setting. *</i>
 
-<b> IMPORTANT NOTICE: It's better to train the Recommended setting on the full Dataset which is avalible from this [link]() </b>
+<b> IMPORTANT NOTICE: It's better to train the Recommended setting on the full Dataset which is avalible from this [Full Dataset](https://www.kaggle.com/datasets/mehdialmousavie/full-u2net-rmbg) [Sample Dataset](https://www.kaggle.com/datasets/mehdialmousavie/sample-u-2-net-rmbg) </b>
 
 After traning the model and before heading to the last cell we recommend reading the next section [next section here](#432-load-the-pretrained-model)
 
@@ -246,8 +246,8 @@ Till this step there is one step more step to be able to use the trained or pret
 
 ![](./Data/test/masks/mask1.png)
 ![](./Data/test/masks/mask2.png)
-![](./Data/test/masks/mask3.png)
-![](./Data/test/masks/mask4.png)
+![](./Data/test/masks/mask3.PNG)
+![](./Data/test/masks/mask4.PNG)
 
 <b>IMPORTANT NOTICE: These results are from traning the model on Recommended settings on traning on the complete dataset </b>
 
@@ -278,7 +278,7 @@ Memory:
 OS:
     RedHat Enterprise (64bit)
 ```
-<b>The system that was used for sample training took 1h 50m to train with 500 images with the accuracy of 73% loss of 0.3761  and val loss of 1.5220</b> 
+<b>The system that was used for sample training took 1h 50m to train with 1000 images with the accuracy of 73% loss of 0.3761  and val loss of 1.5220</b> 
 
 <b>The system that was used for full training took 18h,35m to train with 25K images with the accuracy of 93%  loss of 0.0125  and val loss of 0.0839</b>
 
