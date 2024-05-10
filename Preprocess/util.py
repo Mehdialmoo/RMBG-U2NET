@@ -7,7 +7,8 @@ from PIL import Image
 
 def Rename(path, category):
     for count, filename in enumerate(os.listdir(path)):
-        if filename.endswith(('.jpg', '.jpeg')):  # check if the file is an image
+        if filename.endswith(('.jpg', '.jpeg')):
+            # check if the file is an image
             dst = f"{category}_{str(count)}.jpg"  # create the new filename
         elif filename.endswith(('.png')):
             dst = f"{category}_{str(count)}.png"  # create the new filename
@@ -18,7 +19,8 @@ def Rename(path, category):
 
 def resize(path, new_size):
     for filename in os.listdir(path):
-        if filename.endswith(('.jpg', '.jpeg', '.png')):  # check if the file is an image
+        if filename.endswith(('.jpg', '.jpeg', '.png')):
+            # check if the file is an image
             img_path = f"{path}/{filename}"  # create the image path
             img = Image.open(img_path)  # open the image
             img = img.resize(new_size, Image.LANCZOS)  # resize the image
@@ -45,8 +47,12 @@ def create_csv(image_path, mask_path, output_file):
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for row in image_details:
-            writer.writerow(
-                {'Image Name': row[0], 'Category': row[1], 'Image Path': row[2], 'Mask Path': row[3]})
+            writer.writerow
+            ({
+                'Image Name': row[0],
+                'Category': row[1],
+                'Image Path': row[2],
+                'Mask Path': row[3]})
 
 
 def plot_Data(path):
