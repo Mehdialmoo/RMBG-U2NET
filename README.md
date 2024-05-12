@@ -2,8 +2,10 @@
 ![](./Data/test/masks/mask1.png)
 
 ## RMBG-U2NET Table of content
-
-+ [1. Introduction](#1-introduction)
++ [1. Establishment](#1-establishment)
+    - [1.1. Abstract](#11-abstract)
+    - [1.2. Introduction](#12-introduction)
+    - [1.3. Motivation](#13-motivation)
 + [2. U-2-Net Architecture](#2-u-net-architecture)
     - [2.1. Residual Blocks](#21-residual-blocks)
     - [2.2. Dilated Convolutions](#22-dilated-convolutions)
@@ -29,8 +31,8 @@
 + [5. Sytem information](#5-system-info)
 + [6. References](#5-references)
 
-
-## Abstract
+## 1. Establishment 
+### 1.1. Abstract
 This project  is called RMBG-U2NET, which is a deep learning-based image background removal system using the U-2-Net architecture. The project provides a detailed explanation of the U-Net architecture, the datasets used (P3M-10K, COD-10K-v3, and People Segmentation), and the steps to install and run the model. The model can be trained from scratch or loaded as a pre-trained model, and it can be used for background removal in images for human, animal and objects.
 
 Keywords:
@@ -39,7 +41,7 @@ Image Background Removal, U-2-Net, DeepLearning, ComputerVision
 P3M-10K, COD-10K-v3, People-Segmentation
 
 
-## 1. Introduction
+### 1.2. Introduction
 Image Background Removal using segmentation is a fundamental task in computer vision, where the goal is to classify each pixel in an image as belonging to one of several classes and seprate the wanted pixel and remove the unwanted ones. for this task we will be using U-2-Net based on The U-Net model, which is a popular architecture for image segmentation tasks. firtly lets look at the folder structure of this repository:
 
 ```
@@ -69,6 +71,10 @@ Image Background Removal using segmentation is a fundamental task in computer vi
     ├── RMBG_ENV.yml
     └── workspace.ipynb
 ```
+### 1.3. Motivation
+Image background removal is a crucial task in the field of computer vision, with numerous applications in various domains. The primary motivation behind image background removal is to segregate the foreground object from the background, thereby enabling focused analysis, manipulation, or enhancement of the object of interest. This technique is essential in areas such as image editing, object recognition, and segmentation, 3Dreconstruction where the accurate identification and separation of objects from their surroundings play a pivotal role. From my personal intrest in 3Dreconstruction i look into this project as an opportiunity to be able to finish apart of a bigger project.
+
+In the context of this project, RMBG-U2NET, the motivation for image background removal is to leverage the U-2-Net architecture for efficient and accurate segmentation of objects in images. By utilizing a pre-trained ResNet50 model, the project aims to improve the accuracy of image background removal, making it particularly effective for tasks like image background removal, where both the object of interest (foreground) and the rest of the image (background) need to be accurately identified.
 
 ## 2. U-Net Architecture
 U-Net Architecture is based on nested U-structure that consists of an encoder that downsamples the input image to extract high-level features, a bridge that applies dilated convolutions to increase the receptive field, and a decoder that upsamples the features to produce a segmentation mask.
@@ -283,17 +289,16 @@ OS:
 <b>The system that was used for full training took 18h,35m to train with 25K images with the accuracy of 93%  loss of 0.0125  and val loss of 0.0839</b>
 
 ## 6. References:
-
-1. U-Net: Convolutional Networks for Biomedical Image Segmentation. Olaf Ronneberger, Philipp Fischer, and Thomas Brox. 2015. https://arxiv.org/abs/1505.04597
-2. Deep Residual Learning for Image Recognition. Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. 2015. https://arxiv.org/abs/1512.03385
+1. He, K., Zhang, X., Ren, S. and Sun, J., 2015. Deep Residual Learning for Image Recognition. arXiv (Cornell University).Ronneberger, O., 2.2.
+2. Fischer, P. and Brox, T., 2015. U-Net: Convolutional Networks for Biomedical Image Segmentation. ArXiv (Cornell University).
 3. TensorFlow Keras Documentation. https://www.tensorflow.org/api_docs/python/tf/keras
-ResNet50 Model. https://www.tensorflow.org/api_docs/python/tf/keras/applications/ResNet50
+4. ResNet50 Model. https://www.tensorflow.org/api_docs/python/tf/keras/applications/ResNet50
+5. U-2-Net: U Square Net - GitHub. https://github.com/xuebinqin/U-2-Net.
+6. Image Background Removal Using U-2-Net | by Leslie Kaye VM - Medium. https://medium.com/@vm.lesliekaye/image-background-removal-using-u-2-net-cf36f1c3efc7.
+7. Image Background Removal with U^2-Net and OpenVINO™. https://docs.openvino.ai/2022.3/notebooks/205-vision-background-removal-with-output.html.
+8. Step-by-Step Guide to Automatic Background Removal in Videos ... - Medium. https://medium.com/@CodingNerdsCOG/step-by-step-guide-to-automatic-background-removal-in-videos-with-u-2-model-deep-learning-aae7c297654a.
 
-4. U-2-Net: U Square Net - GitHub. https://github.com/xuebinqin/U-2-Net.
-5. Image Background Removal Using U-2-Net | by Leslie Kaye VM - Medium. https://medium.com/@vm.lesliekaye/image-background-removal-using-u-2-net-cf36f1c3efc7.
-6. Image Background Removal with U^2-Net and OpenVINO™. https://docs.openvino.ai/2022.3/notebooks/205-vision-background-removal-with-output.html.
-7. Step-by-Step Guide to Automatic Background Removal in Videos ... - Medium. https://medium.com/@CodingNerdsCOG/step-by-step-guide-to-automatic-background-removal-in-videos-with-u-2-model-deep-learning-aae7c297654a.
-8. U2Net : A machine learning model that performs object cropping ... - Medium. https://medium.com/axinc-ai/u2net-a-machine-learning-model-that-performs-object-cropping-in-a-single-shot-48adfc158483.
-9. P3M-10K:"P3M-10K: A Large-Scale Portrait Matting Dataset for Learning Automatic Background Replacement." IEEE Transactions on Image Processing, vol. 30, pp. 3665-3678, 2021.
-10. COD-10K-v3: "COD-10K: A Large-Scale Object Detection Dataset for Contextual Object Detection." IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 43, no. 10, pp. 3535-3548, 2021.
-11. People Segmentation: "Deep Learning for People Segmentation." In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pp. 4706-4715, 2017.
+9. U2Net : A machine learning model that performs object cropping ... - Medium. https://medium.com/axinc-ai/u2net-a-machine-learning-model-that-performs-object-cropping-in-a-single-shot-48adfc158483.
+10. P3M-10K:"P3M-10K: A Large-Scale Portrait Matting Dataset for Learning Automatic Background Replacement." IEEE Transactions on Image Processing, vol. 30, pp. 3665-3678, 2021.
+11. COD-10K-v3: "COD-10K: A Large-Scale Object Detection Dataset for Contextual Object Detection." IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 43, no. 10, pp. 3535-3548, 2021.
+12. People Segmentation: "Deep Learning for People Segmentation." In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pp. 4706-4715, 2017.
